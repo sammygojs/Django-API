@@ -5,6 +5,7 @@ urlpatterns = [
     #regular route
     path('books',views.books),
     #class route with @api_view decorator
-    path('orders', views.Orders.listOrders)
-    # path('books/<int:pk>',views.book),
+    path('orders', views.Orders.listOrders),
+    #routing class based views
+    path('books/<int:pk>',views.BookView.as_view())
 ]
