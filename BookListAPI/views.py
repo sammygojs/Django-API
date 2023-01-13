@@ -3,7 +3,8 @@ from django.http import HttpResponse, JsonResponse
 from .models import Book
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
-
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 # Create your views here.
 @csrf_exempt
@@ -26,3 +27,9 @@ def books(request):
             return JsonResponse({'error':'true','message':'required field missing'},status=400)
 
         return JsonResponse(model_to_dict(book), status=201)
+
+class Orders():
+    @staticmethod
+    @api_view(['GET'])
+    def listOrders(request):
+        return Response({'message':'list of orders'},200)
