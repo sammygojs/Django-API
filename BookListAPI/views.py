@@ -30,7 +30,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-#class based views
+# class based views
 class Orders():
     @staticmethod
     @api_view(['GET'])
@@ -39,17 +39,17 @@ class Orders():
 
 from rest_framework import status
 
-#routing class based views
-# class BookView(APIView):
-#     def get(self, request, pk):
-#         return Response({"message":"single book with id " + str(pk)}, status.HTTP_200_OK)
-#     def put(self, request, pk):
-#         return Response({"title":request.data.get('title')}, status.HTTP_200_OK)
+# routing class based views
+class BookView(APIView):
+    def get(self, request, pk):
+        return Response({"message":"single book with id " + str(pk)}, status.HTTP_200_OK)
+    def put(self, request, pk):
+        return Response({"title":request.data.get('title')}, status.HTTP_200_OK)
 
 from rest_framework import viewsets
 from rest_framework.viewsets import ViewSet
 
-#routing class based views using ViewSets
+# routing class based views using ViewSets
 class BookView(viewsets.ViewSet):
     def list(self, request):
         return Response({"message":"All books"}, status.HTTP_200_OK)
