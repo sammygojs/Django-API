@@ -1,6 +1,6 @@
 from django.shortcuts import render,get_object_or_404
 from .models import MenuItem, Category
-from .serializers import MenuItemSerializer
+from .serializers import MenuItemSerializer, CategorySerializer
 # , CategorySerializer
 from rest_framework import generics
 from rest_framework.decorators import api_view
@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 @api_view()
 def menu_items(request):
-    items = MenuItem.objects.all()
+    items = MenuItem.objects.select_related('category').all()
     serialized_items = MenuItemSerializer(items, many=True)
     return Response(serialized_items.data)
     # return Response(items.values())
