@@ -8,8 +8,18 @@ from rest_framework.response import Response
 
 @api_view(['GET','POST'])
 def menu_items(request):
+    # return Response('list of books',status.HTTP_200_OK)
     if request.method=='GET':
         items = MenuItem.objects.select_related('category').all()
+        to_price = request.query_params.get('to_price')
+        category_name = request.query_params.get('category')
+        search = request.query_params.get('search')
+        if category_name:
+            items = items.filter(category__title=category_name)
+        if to_price:
+            items = items.filter(price__lte=to_price)
+        if search:
+            items = items.filter(title__contains=search)
         serialized_items = MenuItemSerializer(items, many=True)
         return Response(serialized_items.data)
         # return Response(items.values())
