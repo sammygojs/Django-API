@@ -7,7 +7,10 @@ from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage
 
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import permission_classes
+from rest_framework.decorators import permission_classes, throttle_classes
+
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+from .throttles import TenCallsPerMinute
 
 @api_view(['GET','POST'])
 def menu_items(request):
@@ -62,6 +65,18 @@ def manager_view(request):
         return Response({"message":"only manager should see this message"})
     else:
         return Response({"message":"you are not authorized"},403)
+
+@api_view()
+@throttle_classes([AnonRateThrottle])
+def throttle_check(request):
+    return Response({"message":"successful"})
+
+@api_view()
+@permission_classes([IsAuthenticated])
+# @throttle_classes([UserRateThrottle])
+@throttle_classes([TenCallsPerMinute])
+def throttle_check_auth(request):
+    return Response({"message":"msg for logged in user only"})
 
 # from rest_framework import viewsets
 # Create your views here.
