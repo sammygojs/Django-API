@@ -55,6 +55,14 @@ def single_item(request,id):
 def secret(request):
     return Response({"message":"Some secret message"})
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def manager_view(request):
+    if request.user.groups.filter(name='manager').exists():
+        return Response({"message":"only manager should see this message"})
+    else:
+        return Response({"message":"you are not authorized"},403)
+
 # from rest_framework import viewsets
 # Create your views here.
 # class MenuItemsViewSet(viewsets.ModelViewSet):
