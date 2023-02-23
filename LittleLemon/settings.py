@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'LittleLemonDRF',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'djoser'
 ]
 
 MIDDLEWARE = [
@@ -128,6 +129,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': [
         'rest_framework_xml.renderers.XMLRenderer'
@@ -144,4 +146,8 @@ REST_FRAMEWORK = {
         'user': '5/minute',
         'ten' : '10/minute'
     },
+}
+
+DJOSER = {
+    "USER_ID_FIELD":"username"
 }
