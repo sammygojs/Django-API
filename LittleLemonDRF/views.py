@@ -1,12 +1,13 @@
 from django.shortcuts import render,get_object_or_404
 from .models import MenuItem, Category
 from .serializers import MenuItemSerializer, CategorySerializer
-# , CategorySerializer
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage
 
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
 
 @api_view(['GET','POST'])
 def menu_items(request):
@@ -17,7 +18,7 @@ def menu_items(request):
         category_name = request.query_params.get('category')
         search = request.query_params.get('search')
         ordering = request.query_params.get('ordering')
-        perpage = request.query_params.get('perpage',default=2)
+        perpage = request.query_params.get('perpage',default=3)
         page = request.query_params.get('page',default=1)
         if category_name:
             items = items.filter(category__title=category_name)
@@ -49,13 +50,22 @@ def single_item(request,id):
     serialized_items = MenuItemSerializer(item)
     return Response(serialized_items.data)
 
+@api_view()
+@permission_classes([IsAuthenticated]) #return a secret message for authenticated users only
+def secret(request):
+    return Response({"message":"Some secret message"})
+
+# from rest_framework import viewsets
 # Create your views here.
-# class MenuItemsView(generics.ListCreateAPIView):
+# class MenuItemsViewSet(viewsets.ModelViewSet):
 #     queryset = MenuItem.objects.all()
 #     serializer_class = MenuItemSerializer
+#     ordering_fields = ['price', 'inventory']
+#     filterset_fields = ['price', 'inventory']
+#     search_fields = ['title']
 
-# class SingleMenuItemView(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = MenuItem.objects.all()
+# class MenuItemViewSet(viewsets.ModelViewSet ):
+#     queryset = get_object_or_404(MenuItem,pk=id)
 #     serializer_class = MenuItemSerializer
 
 # Create your views here.
